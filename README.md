@@ -1,237 +1,60 @@
-# 这是国科大高级软件工程的大作业，我按照作业提示直接克隆了这个仓库，然后添加了一些功能后才想起来应该去fork一下，
-# 总之请关注原仓库https://github.com/PENGZhaoqing/CourseSelect
-
 # CourseSelect [![Build Status](https://travis-ci.org/PENGZhaoqing/CourseSelect.svg?branch=master)](https://travis-ci.org/PENGZhaoqing/CourseSelect)
+原仓库使用了老旧的ruby2.2和rails4.2。这两个版本在现在的机器上部署很麻烦，因此我将原项目升级到了ruby2.6+rails6.0。同时这个仓库也是我自己的课程大作业，不便向原仓库提交pull request。
 
-### [中文教程1](http://blog.csdn.net/ppp8300885/article/details/52594839) [中文教程2](http://blog.csdn.net/ppp8300885/article/details/52601560) [中文教程3](http://blog.csdn.net/ppp8300885/article/details/52669749) [Wiki](https://github.com/PENGZhaoqing/CourseSelect/wiki)
+## 前置技能
+### Bash
+虽然我们在Windows环境下使用Rails，但是我们实际是在WSL内操作的。因此需要一定的Bash基础。
 
+Bash是Linux环境下与用户交互地界面，我们输入命令然后回车，等待命令执行。例如在Bash内输入ls并回车，Bash将为我们打印出当前目录下所有的文件和目录。所有的Bash命令都是这样使用的。至于Bash的高级用法和指令间的数据交互涉及了更多Linux的知识，这里不列出，需要时请访问[鸟哥的网站](http://cn.linux.vbird.org/)，阅读基础篇内容，学习Linux。
 
-这个样本系统是基于国科大研究生课程 (高级软件工程) 开发的项目,目的是帮助入门者学习RoR (Ruby on Rails),
+通常每个命令都会接受一些参数，参数就跟在命令后。下面列举一些常用的Bash指令，让我们可以在WSL内完成日常操作
 
-适合新学者的入手的第一个项目 ([演示Demo戳这里](https://courseselect.herokuapp.com/ ))，入门者可以在这个样本系统上增加更多的功能:
+- `man [command name]`： man是Bash的手册，任何我们不懂的命令都可以通过man查询到相关信息。例如man ls，将会展示一个页面，该页面说明了ls命令的功能和用法。
+- `ls [directory or file name]`：列出当前目录下所有文件
+- `pwd`：打印当前工作目录。我们在Bash内操作时，操作都是针对某一个工作目录进行的，`pwd`会打印出我们当前所在的工作目录的名称。
+- `cd [working directory to switch]`：切换工作目录。如`cd /home`将会把我们的工作目录切换为`/home`。目录命名规则请访问鸟哥的网站。
+- `mkdir [dirctory name]`: 在当前工作目录下创建名为`directory name`的目录。
+- `rm file/directory name`：删除文件或目录。
+- `touch filename`: 在当前工作目录下创建一个名为filename的文件。
+使用任何指令前，你都可以通过`man`去查看以下具体的使用规则和命令的功能。
+#### 我能否不使用Bash
+不可以，因为接下来修改，配置，运行Rails应用都需要使用到Bash。事实上Rails是一个社区驱动的开源框架，而Bash是开源世界里通用的交互系统，就像图形化界面至于Windows一样。没有了Bash我们就失去了与*nix系统交互的能力。
 
-* 处理选课冲突、控制选课人数
-* 统计选课学分，学位课等
-* 增加选课的开放、关闭功能
-* 自定义管理员后台
-* 基于OAuth的授权登陆
-* Excel格式的数据导入
-* 绑定用户邮箱（实现注册激活，忘记密码等）
-* 站内查找检索 （课程按分类查找，过滤等）
+### git
+`git`是Linus开发的一个版本控制工具，目的是为了维护软件版本变化的历史，允许我们在迭代的时候进行版本的回退和多人协同开发。使用git需要理解git的运行机制，限于篇幅，请访问[廖雪峰先生的博客](https://www.liaoxuefeng.com/wiki/896043488029600)学习git的知识。
 
-### 目前功能：
+### Ruby
+Rails使用Ruby构建，因此掌握Ruby对熟悉Rails很重要。Ruby是一门简洁但是不简单的语言。这里建议阅读书籍`Well Grounded Rubist`（google即可找到免费的电子书），重点理解class，method，module，block四块内容。
 
-* 多角色登陆（学生，老师，管理员）
-* 学生动态选课，退课
-* 老师动态增加，删除课程
-* 老师对课程下的学生添加、修改成绩
-* 权限控制：老师和学生只能看到自己相关课程信息
-
-**如果觉得好，给项目点颗星吧～**
-
-### 截图
-
-<img src="/lib/screenshot1.png" width="700">  
-
-<img src="/lib/screenshot2.png" width="700">
-
-<img src="/lib/screenshot3.png" width="700">   
-
-<img src="/lib/screenshot4.png" width="700">
-
-## 说明
-
-目前使用的库和数据库：
-
-* 使用[Bootstrap](http://getbootstrap.com/)作为前端库
-* 使用[Rails_admin Gem](https://github.com/sferik/rails_admin)作为后台管理
-* 使用[Postgresql](http://postgresapp.com/)作为数据库
-
-使用前需要安装Bundler，Gem，Ruby，Rails等依赖环境。
-
-请根据本地系统下载安装[postgresql](https://devcenter.heroku.com/articles/heroku-postgresql#local-setup)数据库，并运行`psql -h localhost`检查安装情况。
-
-
-## 安装
-
-在终端（MacOS或Linux）中执行以下代码
-
-```
-$ git clone https://github.com/PENGZhaoqing/CourseSelect
-$ cd CourseSelect
-$ bundle install
-$ rake db:migrate
-$ rake db:seed
-$ rails s 
-```
-
-在浏览器中输入`localhost:3000`访问主页
+### Rails
+Rails的学习请访问[Rails Guide](https://guides.rubyonrails.org/getting_started.html)。或参考课程说明
 
 ## 使用
+该仓库在WSL下运行，当然也可以到Linux下运行。由于Linux的配置比较简单，所以这里只附上Windows环境下的使用教程。
+### 启用WSL
+我们需要在Windows内启用WSL并安装Ubuntu18.04。我们只需要WSL1即可，不需要使用WSL2。请按照如下步骤启用WSL。
+- 打开开始菜单，以管理员身份运行PowerShell
+- 输入如下命令：`Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux`
+- 重启电脑
+- 前往Windows应用商店，搜索Ubuntu并安装18.04版本
+### 安装Ruby2.6
+前往https://rubyinstaller.org/downloads/，安装Ruby+Devkit 2.6以上版本
+### 安装Postgresql
+前往https://www.enterprisedb.com/downloads/postgres-postgresql-downloads，下载并安装postgresql11。安装过程中会要求设置用户名和密码。请记住自己设置的用户名和密码，后续我们查看数据库数据时需要用到。由于是示例，所以可以简单地设为user和password。
 
-1.学生登陆：
+## 运行
+到目前位置我们已经设置好了运行CourseSelect需要的环境了，接下来让我们试一试能不能使用。
 
-账号：`student1@test.com`
-
-密码：`password`
-
-2.老师登陆：
-
-账号：`teacher1@test.com`
-
-密码：`password`
-
-
-3.管理员登陆：
-
-账号：`admin@test.com`
-
-密码：`password`
-
-账号中数字都可以替换成2,3...等等
-
-
-## Heroku云部署
-
-项目可直接在Heroku上免费部署
-
-1.fork此项目到自己Github账号下
-
-2.创建Heroku账号以及Heroku app
-
-3.将Heroku app与自己Github下的fork的项目进行连接
-
-4.下载配置[Heroku CLI](https://devcenter.heroku.com/articles/heroku-command-line)命令行工具
-
-5.运行`heroku login`在终端登陆，检查与heroku app的远程连接情况`git config --list | grep heroku`，若未检查到相应的app，请看[这里](http://stackoverflow.com/questions/5129598/how-to-link-a-folder-with-an-existing-heroku-app)
-
-6.运行部署，详情[请戳这里](https://devcenter.heroku.com/articles/getting-started-with-rails4#rails-asset-pipeline)
-
-
-## 本地测试
-
-本项目包含了部分的测试（integration/fixture/model test），测试文件位于/test目录下。一键运行所有测试使用`rake test`：
-
-```
-PENG-MacBook-Pro:IMS_sample PENG-mac$ rake test
-Run options: --seed 15794
-
-# Running:
-.........
-
-Finished in 1.202169s, 7.4865 runs/s, 16.6366 assertions/s.
-
-9 runs, 20 assertions, 0 failures, 0 errors, 0 skips
-```
-
-### 模型测试
-
-以用户模型为例, 位于`test/models/user_test.rb`, 首先生成一个`@user`对象，然后`assert`用户是否有效，这里的调用`valid`方法会去检查你的模型中的相关的`validates`语句是否正确，若`@user.valid?`为false, 那么此`assert`会报错，代表`"should be valid"`这条测试没有通过, 单独运行此测试文件使用`rake test test/models/user_test.rb`
-
-
-```
-class UserTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
-
-  def setup
-    @user = User.new(name: "Example User", email: "user@example.com", password: "password", password_confirmation: "password")
-  end
-
-  test "should be valid" do
-    assert  @user.valid?
-  end
-
-  ...
-
-end
-```
-
-### 视图和控制器测试
-
-以用户登录为例，位于`test/integration/user_login_test.rb`，首先同样生成一个@user模型，这个@user的用户名和密码可以在`test/fixtures/users.yml`中指定, 然后我们用get方法到达登录页面（sessions_login_path），然后使用post方法提交这个@user的账号密码来登录，如果登录成功，当前应该会跳转至homes控制器下的index方法进行处理，`assert_redirected_to`能判断这个跳转过程是否发生，然后调用`follow_redirect！`来紧跟当前的跳转，用`assert_template`来判读跳转后的视图文件是否为`homes/index`, 最后在这个视图文件下做一些测试，比如判断这个视图下连接为root_path的个数等等（根据当前登录的角色不同，当前的页面链接会不同，比如admin用户就会有控制面板的链接rails_admin_path，而普通用户没有，因此可以根据链接的个数来判断当前登录用户的角色）
-
-```
-class UserLoginTest < ActionDispatch::IntegrationTest
-
-  def setup
-    @user = users(:peng)
-  end
-
-  test "login with valid information" do
-    get sessions_login_path
-    post sessions_login_path(params: {session: {email: @user.email, password: 'password'}})
-    assert_redirected_to controller: :homes, action: :index
-    follow_redirect!
-    assert_template 'homes/index'
-    assert_select "a[href=?]", root_path, count: 2
-    assert_select "a[href=?]", rails_admin_path, count: 0
-  end
-end
-```
-
-### 测试涵盖率检测
-
-我们可以使用[simplecov](https://github.com/colszowka/simplecov/)库来检测我们编写的测试对于我们的项目是否完整，步骤如下：
-
-1. 在Gemfile文件中导入simplecov库：`gem 'simplecov', :require => false, :group => :test`，然后`bundle install`安装
-2. 在test/test_helper.rb的最前面加入simplecov的启动代码（这里默认使用rails自带的test框架，simplecov也支持其他测试框架如rspec，那么启动代码导入的位置请参考simplecov的官方文档）
-
-  ```
-  # 注意这里必须在 require rails/test_help 之前加入，否则不会生效
-  require 'simplecov'
-  SimpleCov.start 'rails'
-
-  ENV['RAILS_ENV'] ||= 'test'
-  require File.expand_path('../../config/environment', __FILE__)
-  require 'rails/test_help'
-
-  class ActiveSupport::TestCase
-    # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
-    fixtures :all
-
-    # Add more helper methods to be used by all tests here...
-  end
-  ```
-
-3. 运行`rake test`,成功后会根目录的coverage下生成一个index.html文件，用浏览器打开能看到结果如下：
-
-  <img src="/lib/screenshot5.png" width="700">  
-
-  <img src="/lib/screenshot6.png" width="700">  
-
-
-## Travis CI 线上自动测试
-
-上述为本地测试，我们可以使用Travis CI来实现自动测试，首先申请一个Travis CI的账号，然后与自己的github连接起来，接着在自己项目根目录中增加一个新的文件`.travis.yml`如下，这个文件中指定了测试需要的ruby版本，数据库等配置以及一些测试前的脚本操作，当你的github发生更新后，Travis CI会自动触发测试（需要你在Travis CI中自己设置自动/手动触发），然后读取你的`.travis.yml`文件配置进行测试，其实也就是把本地测试拉到服务器上进行，测试成功后会在你的github项目给一个buliding pass的标签（见CourseSelect题目旁边），代表当前的代码是通过测试的
-
-```
-language: ruby
-
-rvm:
-  - 2.2
-
-env:
-  - DB=pgsql
-
-services:
-  - postgresql
-
-script:
-  - RAILS_ENV=test bundle exec rake db:migrate --trace
-  - bundle exec rake db:test:prepare
-  - bundle exec rake
-
-before_script:
-  - cp config/database.yml.travis config/database.yml
-  - psql -c 'create database courseselect_test;' -U postgres
-```
-
-## How to Contribute
-
-先fork此项目，在分支修改后，pull request到主分支
-
-提问请到issues里创建，欢迎contributor！
+首先在Windows内启动postgresql server。打开开始菜单，搜索pgAdmin，启动它。然后它会打开一个网页，我们登陆上去就可以了。不用管其它的事情。
+在WSL内切换到自己喜欢的目录，按序执行如下指令
+- `git clone https://github.com/Dicridon/CourseSelect`
+- `cd CourseSelect`
+- `bundle install`
+- `rake db:migrate`
+- `rake db:seed`
+- `rails s`
+保持当前命令行，不要中断它。打开浏览器，访问localhost:3000。你应该可以看到如下界面：
+![](./lib/login.png)
+环境搭建成功了~
 
 
