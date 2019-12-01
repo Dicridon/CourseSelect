@@ -1,4 +1,5 @@
-<div class="row">
+<!--if student_logged_in? redirect_to list.html-->
+<div class="row"  style="margin-top: 10%"><!--change position of login pannel-->
   <div class="col-sm-offset-4 col-sm-4">
     <div class="panel panel-success">
       <div class="panel-heading">
@@ -6,19 +7,19 @@
       </div>
       <div class="panel-body">
 
-        <%= form_for(:session, url: sessions_login_path, method: :post, html: {role: 'form'}) do |f| %>
+        <%= form_with(url: sessions_login_path, method: :post, html: {role: 'form'}) do |f| %>
             <div class="form-group">
               <%= f.label :email, "账号密码登陆" %>
               <div class="input-group">
                 <div class="input-group-addon"><span class="glyphicon glyphicon-envelope"></span></div>
-                <%= f.email_field :email, class: 'form-control', placeholder: "输入邮箱" %>
+                <%= f.email_field 'session[email]', class: 'form-control', placeholder: "输入邮箱" %>
               </div>
             </div>
 
             <div class="form-group">
               <div class="input-group">
                 <div class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></div>
-                <%= f.password_field :password, class: 'form-control', placeholder: "输入密码" %>
+                <%= f.password_field 'session[password]', class: 'form-control', placeholder: "输入密码" %>
               </div>
             </div>
 

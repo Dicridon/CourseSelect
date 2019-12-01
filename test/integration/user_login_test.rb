@@ -9,9 +9,9 @@ class UserLoginTest < ActionDispatch::IntegrationTest
   test "login with valid information" do
     get sessions_login_path
     post sessions_login_path(params: {session: {email: @user.email, password: 'password'}})
-    assert_redirected_to controller: :homes, action: :index
+    assert_redirected_to controller: :courses, action: :index
     follow_redirect!
-    assert_template 'homes/index'
+    assert_template 'courses/index'
     assert_select "a[href=?]", root_path, count: 2
     assert_select "a[href=?]", rails_admin_path, count: 0
   end

@@ -15,8 +15,9 @@ Rails.application.routes.draw do
   #   resources :products
 
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
-  root 'homes#index'
-
+  # root 'homes#index'
+  root 'sessions#new'
+  
   resources :courses do
     member do
       get :select
@@ -26,6 +27,11 @@ Rails.application.routes.draw do
     end
     collection do
       get :list
+      get :summery
+      get :schedule
+      get :batch
+      get :search
+      post :upload
     end
   end
 

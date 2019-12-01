@@ -1,3 +1,6 @@
+require 'i18n'
+I18n.default_locale = :en
+
 RailsAdmin.config do |config|
 
   # config.main_app_name = ["Cool app", "BackOffice"]

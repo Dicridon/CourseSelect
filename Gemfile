@@ -1,10 +1,11 @@
-source 'https://gems.ruby-china.org'
+# source 'http://gem.ruby-china.org'
+source 'http://rubygems.org'
 
 gem 'bootstrap-sass', '~> 3.3.7'
 # Use ActiveModel has_secure_password
-gem 'bcrypt', '~> 3.1.11'
+gem 'bcrypt', '~> 3.1.13'
 gem 'faker', '~> 1.6.3'
-gem 'rails_admin', '~> 0.8.1'
+gem 'rails_admin', '~> 2.0.0'
 gem 'pry-rails'
 gem 'carrierwave'
 gem 'paperclip'
@@ -14,18 +15,26 @@ gem 'roo'
 gem 'roo-xls'
 gem 'paper_trail'
 gem 'rubyzip', '~> 1.1.0'
-gem 'axlsx', '2.1.0.pre'
+gem 'axlsx', '~> 2', '>=2.0.1'
 gem 'axlsx_rails'
 gem 'rails-i18n'
+gem 'nokogiri', '>= 1.6.7.rc'
+gem 'tzinfo'
+gem 'tzinfo-data'
+gem 'activemodel', '~>6.0', '>=6.0.1'
+gem 'activerecord', '~>6.0', '>=6.0.1'
+gem 'activesupport', '~>6.0', '>=6.0.1'
+gem 'rails-controller-testing'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.2.5.2'
+gem 'rails', '~>6.0', '>=6.0.1'
+# gem 'rails', '> 5.0.7.2'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 # Use CoffeeScript for .coffee assets and views
-gem 'coffee-rails', '~> 4.1.0'
+gem 'coffee-rails', '~> 5.0'
 # See https://github.com/rails/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
 
@@ -41,7 +50,9 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'simplecov', :require => false, :group => :test
 
 # for postgresql
-gem 'pg', '~> 0.18.4'
+# gem 'pg', '~> 0.18.4'
+gem 'pg', '~> 0.18'
+# gem 'pg', '>= 0.19.0.beta'
 
 # gem 'bcrypt', '~> 3.1.7'
 

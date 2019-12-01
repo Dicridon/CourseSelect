@@ -15,28 +15,25 @@
             <thead>
 
             <tr>
-              <th>学号</th>
-              <th>名字</th>
-              <th>专业</th>
-              <th>培养单位</th>
-              <th>课程</th>
-              <th>目前分数</th>
-
+              <th>课程编号</th>
+              <th>课程名称</th>
+              <th>学分</th>
+              <th>课程类型</th>
+              <th>分数</th>
             </tr>
             </thead>
             <tbody>
 
             <% @grades.each do |grade| %>
                 <tr>
-                  <td><%= grade.user.num %></td>
-                  <td><%= grade.user.name %></td>
-                  <td><%= grade.user.major %></td>
-                  <td><%= grade.user.department %></td>
+                  <td><%= grade.course.course_code %></td>
                   <td><%= grade.course.name %></td>
+                  <td><%= grade.course.credit %></td>
+                  <td><%= grade.course.course_type %></td>
                   <td><%= grade.grade %></td>
 
                   <% if teacher_logged_in? %>
-                      <%= form_for grade, url: grade_url(id: grade.id, course_id: grade.course.id), method: :patch do |f| %>
+                      <%= form_with model: grade, url: grade_url(id: grade.id, course_id: grade.course.id), method: :patch do |f| %>
                           <td><%= f.text_field :grade %></td>
                           <td><%= f.submit "提交", class: "btn btn-success btn-xs" %></td>
                       <% end %>

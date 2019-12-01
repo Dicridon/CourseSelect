@@ -1,3 +1,6 @@
+# 这是国科大高级软件工程的大作业，我按照作业提示直接克隆了这个仓库，然后添加了一些功能后才想起来应该去fork一下，
+# 总之请关注原仓库https://github.com/PENGZhaoqing/CourseSelect
+
 # CourseSelect [![Build Status](https://travis-ci.org/PENGZhaoqing/CourseSelect.svg?branch=master)](https://travis-ci.org/PENGZhaoqing/CourseSelect)
 
 ### [中文教程1](http://blog.csdn.net/ppp8300885/article/details/52594839) [中文教程2](http://blog.csdn.net/ppp8300885/article/details/52601560) [中文教程3](http://blog.csdn.net/ppp8300885/article/details/52669749) [Wiki](https://github.com/PENGZhaoqing/CourseSelect/wiki)
