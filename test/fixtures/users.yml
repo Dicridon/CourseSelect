@@ -9,3 +9,8 @@ peng:
   name: 彭兆卿
   email: admin@test.com
   password_digest: <%= User.digest('password') %>
+
+x: 
+  name: aaa
+  email: xiongziwei15@mails.ucas.ac.cn
+  password_digest: <%= User.digest('123456') %>

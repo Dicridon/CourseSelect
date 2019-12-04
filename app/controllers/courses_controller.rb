@@ -139,21 +139,29 @@ class CoursesController < ApplicationController
   end
 
   def select
+    logger.debug "Debug info: get id: #{params[:id]}"
     @course=Course.find_by_id(params[:id])
-    flash = select_check @course
     path = list_courses_path
-    if flash[:success]
-      current_user.courses<<@course
-      path = courses_path
+    flash = {}
+    if @course && @course.open
+      flash = select_check @course
+      if flash[:success]
+        current_user.courses<<@course
+        path = courses_path
+      end
+    else
+      flash[:danger] = "Course ID #{params[:id]} is invalid"
     end
     redirect_to path, flash: flash
   end
 
   def quit
     @course=Course.find_by_id(params[:id])
-    current_user.courses.delete(@course)
-    flash={:success => "成功退选课程: #{@course.name}"}
-    redirect_to courses_path, flash: flash
+    if @course
+      current_user.courses.delete(@course)
+      flash={:success => "成功退选课程: #{@course.name}"}
+      redirect_to courses_path, flash: flash
+    end
   end
 
   def batch
@@ -165,20 +173,22 @@ class CoursesController < ApplicationController
       no_course = false
       params[:course].each do |id|
         course = Course.find_by_id(id)
-        flash = select_check course
-        # add as many courses as possible
-        if flash[:success]
-          current_user.courses << course
-          success << flash[:success]
-        else
-          errors << flash[:danger]
+        if course && course.open
+          flash = select_check course
+          # add as many courses as possible
+          if flash[:success]
+            current_user.courses << course
+            success << flash[:success]
+          else
+            errors << flash[:danger]
+          end
         end
       end
     end
     
     msg[:success] = success.join('\n') unless success.empty?
     msg[:danger] = errors.join('\n') unless errors.empty?
-    msg[:danger] = 'Please select at least one course' if no_course
+    msg[:danger] = 'Please select at least one valid course' if no_course
     redirect_to list_courses_path, flash: msg
   end
 
