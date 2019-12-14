@@ -142,6 +142,7 @@ class CoursesController < ApplicationController
       if flash[:success]
         current_user.courses<<@course
         path = courses_path
+        @course.student_num = @course.student_num + 1
       end
     else
       flash[:danger] = "Course ID #{params[:id]} is invalid"
