@@ -11,7 +11,10 @@ module LoginHelper
     post sessions_login_path(params: {session: {email: email, password: pwd}})
     follow_redirect!
   end
+
+
 end
+
 
 class ActiveSupport::TestCase
   include LoginHelper

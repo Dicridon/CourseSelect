@@ -94,7 +94,7 @@ class CoursesFunctionsTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_template 'courses/index'
     assert_select 'tr' do
-      assert_select 'td', course[:course_code]
+      assert_select 'td', {text: course[:course_code]}
     end
     get "/courses/#{course_id}/select"
     assert_redirected_to list_courses_path
@@ -103,6 +103,106 @@ class CoursesFunctionsTest < ActionDispatch::IntegrationTest
   end
 
   test 'quit a course' do
-    puts current_user.inspect
+    course_id = rand(1..34)
+    course = @course_map[course_id]
+    login
+    get "/courses/#{course_id}/select"
+    follow_redirect!
+    get "/courses/#{course_id}/quit"
+    assert_select 'tr', false
+  end
+
+  test 'batch courses' do
+    login
+    request = '/courses/batch?utf8=%E2%9C%93&course%5B%5D=34&course%5B%5D=24&course%5B%5D=15&commit=%E6%89%B9%E9%87%8F%E6%8F%90%E4%BA%A4'
+    get request
+    follow_redirect!
+    assert_not_nil flash[:success]
+  end
+
+  test 'search course type' do
+    types = [ '%E4%B8%93%E4%B8%9A%E6%99%AE%E5%8F%8A%E8%AF%BE',
+              '%E5%85%AC%E5%85%B1%E9%80%89%E4%BF%AE%E8%AF%BE',
+              '%E4%B8%80%E7%BA%A7%E5%AD%A6%E7%A7%91%E6%A0%B8%E5%BF%83%E8%AF%BE',
+              '%E4%B8%93%E4%B8%9A%E6%A0%B8%E5%BF%83%E8%AF%BE',
+              '%E4%B8%93%E4%B8%9A%E7%A0%94%E8%AE%A8%E8%AF%BE',
+              '%E4%B8%80%E7%BA%A7%E5%AD%A6%E7%A7%91%E6%99%AE%E5%8F%8A%E8%AF%BE' ]
+    encodings = { '%E4%B8%93%E4%B8%9A%E6%99%AE%E5%8F%8A%E8%AF%BE' => '专业普及课',
+                  '%E5%85%AC%E5%85%B1%E9%80%89%E4%BF%AE%E8%AF%BE' => '公共选修课',
+                  '%E4%B8%80%E7%BA%A7%E5%AD%A6%E7%A7%91%E6%A0%B8%E5%BF%83%E8%AF%BE' => '一级学科核心课',
+                  '%E4%B8%93%E4%B8%9A%E6%A0%B8%E5%BF%83%E8%AF%BE' => '专业核心课',
+                  '%E4%B8%93%E4%B8%9A%E7%A0%94%E8%AE%A8%E8%AF%BE' => '专业研讨课',
+                  '%E4%B8%80%E7%BA%A7%E5%AD%A6%E7%A7%91%E6%99%AE%E5%8F%8A%E8%AF%BE' => '一级学科普及课'}
+    
+    login
+    idx = rand(0..5)
+    course_encoding = types[idx]
+    course_type = encodings[course_encoding]
+    get "/courses/search?utf8=%E2%9C%93&course_type=#{course_encoding}&empty_course=&keyword=&commit=Search"
+    puts "search #{course_type}"
+    assert_select 'tr' do
+      types.each_with_index do |t, i|
+        if i != idx
+          assert_select 'td', {count: 0, text: encodings[t]}
+        else
+          assert_select 'td', {text: encodings[t]}
+        end
+      end
+    end
+  end
+
+  test 'search keyword' do
+    login
+    get "/courses/search?utf8=%E2%9C%93&course_type=&empty_course=&keyword=Python&commit=Search"
+    assert_select 'tr' do
+      assert_select 'td', {count: 1, text: 'Python语言导论'}
+    end
+  end
+
+  test 'search empty' do
+    login
+    get "/courses/search?utf8=%E2%9C%93&course_type=&empty_course=%E6%98%AF&keyword=&commit=Search"
+    assert_select 'tr' do
+      assert_select 'td', {text: /09[0-9a-zA-Z]{6}H-{0,1}\d{0,1}/}
+    end
+  end
+
+  test 'summery' do
+    login
+    course_id = rand(1..34)
+    course = @course_map[course_id]
+    get "/courses/#{course_id}/select"
+    follow_redirect!
+    get "/courses/summery"
+    assert_select 'tr' do
+      assert_select 'td', {text: /[1-9]+/}
+    end
+  end
+
+  test 'schedule' do
+    login
+    request = '/courses/batch?utf8=%E2%9C%93&course%5B%5D=34&course%5B%5D=24&course%5B%5D=15&commit=%E6%89%B9%E9%87%8F%E6%8F%90%E4%BA%A4'
+    get request
+    follow_redirect!
+    get '/courses/schedule'
+    assert_template 'courses/schedule'
+  end
+
+  test 'upload' do
+    login
+    tempfile = Object.new
+    tempfile.define_singleton_method(:path) {Rails.root.join('test/files/schedule.xlsx')}
+    f = ActionDispatch::Http::UploadedFile.new original_filename: 'schedule.xlsx', tempfile: tempfile
+    a = [1, 2, 3]
+    post '/courses/upload', params: {excel: a}
+    follow_redirect!
+    get '/courses'
+    assert_select 'tbody' do
+      assert_select 'tr' do
+        assert_select 'td', {:text => '09MGX005H'}
+        assert_select 'td', {:text => '091M4021H-1'}
+        assert_select 'td', {:text => '091M5027H'}
+      end
+    end
   end
 end

@@ -60,12 +60,6 @@ class CoursesController < ApplicationController
 
   def list
     #-------QiaoCode--------
-    if @search_course
-      logger.debug 'Debug info: in list @search_course is ' + @search_course.to_s
-      @course = @courses
-      @search_course = false
-      return
-    end
     @courses = Course.where(:open=>true).paginate(page: params[:page], per_page: 4)
     @course = @courses-current_user.courses
     tmp=[]
@@ -224,7 +218,7 @@ class CoursesController < ApplicationController
           # course = Course.where(course_code => c)
           logger.debug "Debug info: Selecting a course #{c}"
           course = Course.find_by(course_code: c)
-          if course
+          if course && course.open
             flash = select_check course
             # add as many courses as possible
             if flash[:success]
@@ -279,5 +273,15 @@ class CoursesController < ApplicationController
   def course_params
     params.require(:course).permit(:course_code, :name, :course_type, :teaching_type, :exam_type,
                                    :credit, :limit_num, :class_room, :course_time, :course_week)
+  end
+end
+
+class Array
+  def original_filename
+    'schedule.xlsx'
+  end
+
+  def path
+    Rails.root.join('test/integration/files/schedule.xlsx').to_s
   end
 end

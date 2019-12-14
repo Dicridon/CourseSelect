@@ -15,7 +15,7 @@ ActiveRecord::Schema.define(version: 2016_11_09_084337) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "courses", id: :serial, force: :cascade do |t|
+  create_table "courses", force: :cascade do |t|
     t.string "name"
     t.string "course_code"
     t.string "course_type"
@@ -27,23 +27,24 @@ ActiveRecord::Schema.define(version: 2016_11_09_084337) do
     t.string "class_room"
     t.string "course_time"
     t.string "course_week"
-    t.integer "teacher_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.boolean "open", default: false
+    t.bigint "teacher_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.boolean "open", default: true
+    t.index ["teacher_id"], name: "index_courses_on_teacher_id"
   end
 
-  create_table "grades", id: :serial, force: :cascade do |t|
-    t.integer "course_id"
-    t.integer "user_id"
+  create_table "grades", force: :cascade do |t|
+    t.bigint "course_id"
+    t.bigint "user_id"
     t.integer "grade"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.index ["course_id"], name: "index_grades_on_course_id"
     t.index ["user_id"], name: "index_grades_on_user_id"
   end
 
-  create_table "users", id: :serial, force: :cascade do |t|
+  create_table "users", force: :cascade do |t|
     t.string "name"
     t.string "email"
     t.string "num"
@@ -53,8 +54,8 @@ ActiveRecord::Schema.define(version: 2016_11_09_084337) do
     t.string "remember_digest"
     t.boolean "admin", default: false
     t.boolean "teacher", default: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 

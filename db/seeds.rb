@@ -37,8 +37,6 @@ class StudentGenerator
 end
 
 #-------------------------------------------------------------------------------------
-
-
 User.create(
     name: "彭兆卿",
     email: "admin@test.com",
